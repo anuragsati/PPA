@@ -1,3 +1,198 @@
+### preorder / postorder to bst
+
+-	method 1 : naive O(n^2)
+	we know preorder : root left right
+	all nodes in left are smaller and all nodes in right are larger
+		root [smaller]  [larger]
+	
+	```c++
+		//this function accepts preorder array and makes bst out of it and returns its head
+		TreeNode* solve(vector<int> &pre, int l, int r){
+			if(l>r)
+				return NULL;
+
+			TreeNode* root = new TreeNode(pre[l]);
+
+			//the elements which are smaller than pre[l] ==> lst
+			// rest in rst
+			int i;
+			for(i=l+1; i<=r; ++i){
+				if(pre[l] < pre[i])
+					break;
+			}
+
+			root->left = solve(pre, l+1, i-1);
+			root->right= solve(pre, i, r);
+			return root;
+		}
+
+		TreeNode* bstFromPreorder(vector<int>& preorder) {
+			int n = preorder.size();
+			return solve(preorder, 0, n-1);
+		}
+	```
+
+
+-	method 2 : better brute force O(n) O(n)
+	for every node instead of naive way we can directly check which node is next greatest in preorder
+	we use next greater element to right for preorder -> bst
+
+
+-	method 3 : O(n) O(1) we use interval method
+	we try to construct tree sequentially and check if this node can be placed here or not based on interval
+	if it can be placed we place it else we put null and go up the recursion 
+
+	```c++
+		TreeNode* solve(vector<int> &pre, int mn, int mx, int &idx){
+			if(idx >= pre.size()){
+				--idx;
+				return NULL;
+			}
+			
+			if(mn < pre[idx] && pre[idx] < mx){
+				TreeNode* node = new TreeNode(pre[idx]);
+
+				node->left = solve(pre, mn, pre[idx], ++idx);
+				node->right = solve(pre, pre[idx], mx, ++idx);
+
+				return node;
+			}
+			else{
+				--idx;
+				return NULL;
+			}
+		}
+		TreeNode* bstFromPreorder(vector<int>& preorder) {
+			int idx = 0;
+			return solve(preorder, INT_MIN, INT_MAX, idx);
+		}
+	```
+
+
+### interval method in bst is very imp [low, high]
+
+
+
+### array to height balanced BST
+function(l, r) => takes an array and returns height balnced bst
+we find mid make that node
+then lst will have all nodes from [l, mid-1]
+rst will have nodes from [mid+1, r]
+
+
+```c++
+	TreeNode* convert(int l, int r, vector<int> &a){
+		if(l > r)
+			return NULL;
+
+		int mid = l + (r-l) / 2;
+		TreeNode* root = new TreeNode(a[mid]);
+		root->left = convert(l, mid-1, a);
+		root->right = convert(mid+1, r, a);
+
+		return root;
+	}
+```
+
+
+
+### max sum BST in a binary tree
+
+```c++
+	struct subtreeInfo {
+		bool isBST;
+		int mn, mx, sum;
+
+		subtreeInfo(bool bst, int mnval, int mxval, int treesum){
+			isBST = bst;
+			mn = mnval;
+			mx = mxval;
+			sum = treesum;
+		}
+	};
+
+	int ans = 0;
+	
+	subtreeInfo* solve(TreeNode* root){
+		if(!root)
+			return new subtreeInfo(true, INT_MAX, INT_MIN, 0);
+
+
+		subtreeInfo* lst = solve(root->left);
+		subtreeInfo* rst = solve(root->right);
+
+		int mn = min({root->val, lst->mn, rst->mn});
+		int mx = max({root->val, lst->mx, rst->mx});
+		int curr_sum = root->val + lst->sum + rst->sum;
+
+		if(lst->isBST && rst->isBST && lst->mx < root->val && root->val < rst->mn){		//this subtree is bst
+			ans = max(ans, curr_sum);
+			return new subtreeInfo(true, mn, mx, curr_sum);
+		}
+		else{
+			return new subtreeInfo(false, mn, mx, curr_sum);
+		}
+	}
+
+    int maxSumBST(TreeNode* root) {
+		ans = 0;
+		solve(root);
+		return ans;
+    }
+```
+
+
+
+### Largest BST in a binary tree
+we simply return all the info we need from subtrees
+just like check if tree is bst or not except here we need one more data i.e size of subtree
+
+```c++
+	struct sInfo{
+		bool isBST;
+		int mn;
+		int mx;
+		int subtree_size;
+
+		sInfo(bool bst, int mnVal, int mxVal, int cnt){
+			isBST = bst;
+			mn = mnVal, mx = mxVal, subtree_size = cnt;
+		}
+	};
+
+	int ans = 0;
+
+	sInfo* solve(Node* root){
+		if(!root)
+			return new sInfo(true, INT_MAX, INT_MIN, 0);
+
+		sInfo* lst = solve(root->left);
+		sInfo* rst = solve(root->right);
+
+		int subSize = 1 + lst->subtree_size + rst->subtree_size;
+		int mn = min({root->data, lst->mn, rst->mn});
+		int mx = max({root->data, lst->mx, rst->mx});
+		bool isBST = lst->isBST && rst->isBST;
+
+		if(lst->isBST && rst->isBST && lst->mx < root->data && root->data < rst->mn){
+			ans = max(ans, subSize);
+			return new sInfo(isBST, mn, mx, subSize);
+		}
+		else{
+			return new sInfo(false, mn, mx, subSize);
+		}
+	}
+
+    int largestBst(Node *root) {
+		ans = 0;
+		solve(root);
+		return ans;
+    }
+
+```
+
+
+
 ### Check if tree is BST or not
 - method 1 : check if inorder traversal is sorted or not (do it by maintaining prev pointer in recursion)
 
@@ -208,6 +403,8 @@ public:
 
 
 ### Insert in BST
+inserting as a leaf node
+if val is greater than curr node then move right if right doesnot exist then insert here else move right
 
 ```c++
     TreeNode* insertIntoBST(TreeNode* root, int val) {

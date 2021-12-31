@@ -1,3 +1,173 @@
+### whenever we need to make balanced bst we divide and conquer using mid element
+
+
+### whenver array / LL comes with trees dividing the array in function calls is good choice
+
+like this
+
+			[1, 2, 3, 4, 5, 6]
+		[1, 2, 3]			[4, 5, 6]
+	...			...		...				...	
+
+
+
+
+
+### ways to uniquely identify a tree
+
+-	preorder + NULLS
+-	postorder + NULLS
+-	preorder + inorder			(we find position of root in inorder and then find nodes in lst and rst using inorder)
+-	postorder + inorder
+
+
+### 2*i+1 and 2*i+2  happens only in complete binary treee
+-	and it can be done using queues
+
+
+
+### serialization / deserialization
+	in deserialization after first call to left finishes the (++idx) will point to right subtrees first node
+	bcz we are moving idx using reference
+
+	like this
+
+	node* solve(vector<int> &pre, int &idx){
+		if(idx >= pre.size())
+			return NULL;
+		
+		node* temp = newNode(pre[idx]);
+		temp->left = solve(pre, preLN, ++idx);
+		temp->right = solve(pre, preLN, ++idx);
+		return temp;
+	}
+
+
+
+```c++
+class Solution
+{
+    public:
+
+    //serialize using preorder with null nodes 
+	void serializeHelper(Node* root, vector<int> &ans){
+		if(!root){
+			ans.push_back(-1);
+			return;
+		}
+
+		ans.push_back(root->data);
+		serializeHelper(root->left, ans);
+		serializeHelper(root->right, ans);
+		return;
+	}
+    vector<int> serialize(Node *root) {
+		vector<int> ans;
+		serializeHelper(root, ans);
+		return ans;
+    }
+    
+
+    //deserialize 
+	//f(i) makes tree starting from ith index considering [i, a.size()]
+	Node* deSerializeHelper(int &idx, vector<int> &a){
+		if(idx >= a.size())
+			return NULL;
+		
+		if(a[idx] == -1)
+			return NULL;
+		
+		Node* node = new Node(a[idx]);
+		node->left = deSerializeHelper(++idx, a);
+		node->right = deSerializeHelper(++idx, a);
+		return node;
+	}
+    Node * deSerialize(vector<int> &a) {
+		int idx = 0;
+		return deSerializeHelper(idx, a);
+    }
+
+};
+```
+
+
+
+### whenever we have generate all possible trees
+	use array returning method
+	like this
+
+	for(int i=1; i<n; ++i){
+		vector<TreeNode*> lst = allPossibleFBT(i);
+		vector<TreeNode*> rst = allPossibleFBT(n-1-i);
+
+		for(auto x : lst){
+			for(auto y : rst){
+				ans.push_back(new TreeNode(0, x, y));
+			}
+		}
+	}
+
+
+
+
+
+
+
+***
+### solution to missing / overlapping levels in vertical order traversal
+[https://leetcode.com/problems/maximum-width-of-binary-tree/submissions/]
+	since we are missing levels
+	i.e we have overlapping levels
+
+	then we can level them vertically as
+				
+					n
+			2*n			2*n + 1
+
+
+
+
+
+
+***
+### generate all possible binary trees
+[https://leetcode.com/problems/all-possible-full-binary-trees/solution/]
+
+	we use recursion 
+	each function returns vector of all possible trees
+	then we simply calculate all possible using rule of product
+	total = lst * rst
+	and merge and send then ans. above
+
+```c++
+    vector<TreeNode*> allPossibleFBT(int n) {
+		//base case : only one node then create it
+		if(n==1){
+			return vector<TreeNode*> {new TreeNode(0, NULL, NULL)};
+		}
+
+		//otherwise create all possible trees from left as well as right
+		vector<TreeNode*> ans;
+
+		for(int i=1; i<n; ++i){
+			vector<TreeNode*> lst = allPossibleFBT(i);
+			vector<TreeNode*> rst = allPossibleFBT(n-1-i);
+
+			for(auto x : lst){
+				for(auto y : rst){
+					ans.push_back(new TreeNode(0, x, y));
+				}
+			}
+		}
+
+		return ans;
+    }
+```
+
+
+
+
+
 ***
 ### bottom View 
 
@@ -238,6 +408,10 @@ the element that needs to be processed next must come at top of the stack
 	N L R 
 	<----
 
+	L
+	R
+	N
+
 ```c++
     vector<int> preorderTraversal(TreeNode* root) {
 		vector<int> ans;
@@ -274,6 +448,10 @@ the element that needs to be processed next must come at top of the stack
 	L N R
 	<----
 
+	L
+	N
+	R
+
 	can be done for preorder too
 
 ```c++
@@ -290,7 +468,7 @@ the element that needs to be processed next must come at top of the stack
 			s.pop();
 
 			if(node.second == 2){
-				ans.push_back(node.first->val);
+				ans.dpush_back(node.first->val);
 			}
 			else{
 				if(node.first->right)
@@ -311,6 +489,10 @@ the element that needs to be processed next must come at top of the stack
 - 3.PostOrder
 L R N
 <----
+
+	L
+	R
+	N
 
 ```c++
     vector<int> PostorderTraversal(TreeNode* root) {
@@ -351,12 +533,36 @@ L R N
 
 ***
 ### We can use iterative inorder traversal in BST using stack [2sum using BST leetcode] 
+	to get smallest element we get to leftmost element
 	to get next greater element just go to left most node of its right child while pushing into stack
-	while(node)
-		stack.push(node-data);
-		node = node->left;
 
+```c++
+	//this function give a root goes to leftmost while remembering the past
+	void getleft(TreeNode*& root, stack<TreeNode*> &s){
+		TreeNode* temp = root;
+		while(temp){
+			s.push(temp);
+			temp = temp->left;
+		}
+	}
 
+    vector<int> inorderTraversal(TreeNode* root) {
+		vector<int> ans;
+		stack<TreeNode*> s;
+		getleft(root, s);
+
+		while(!s.empty()){
+			TreeNode* node = s.top();
+			s.pop();
+
+			ans.push_back(node->val);
+			getleft(node->right, s);
+		}
+
+		return ans;
+    }
+```
+	
 
 
 

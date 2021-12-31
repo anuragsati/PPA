@@ -1,17 +1,44 @@
-***
-### Number of elements towards right which are greater than current element (extension of NGE)
+### whenever we need to optimize better than O(n) then it is either using -1 or using encoding
+
+
+
+### solve innermost then outer then outer is a stack property
+
+
+
+
+### whenver we are inserting and deleting from back of array it is a stack
+
+
+
+
+### greatest minimum on right (uses binary search)
+we traverse from right to left and maintain a multiset(repeated elements)
+for each index we encounter we search in the set the max value which is smaller than current
+
 
 ```c++
-	stack<int> s;
-	vector<int> ng(n);
+	//then find greatest minimum on right (element which is just smaller than current element towards right)
+	vector<int> greatestMinRight(n);
+	multiset<int> s;
 	for(int i=n-1; i>=0; --i){
-		while(!s.empty() && a[s.top()] < a[i])
-			s.pop();
+		if(i==n-1){
+			greatestMinRight[i] = INT_MIN; 		//greatese min not found
+		}
+		else{
+			auto p = s.upper_bound(a[i]-1);
+			if(p != s.begin()){
+				--p;
+				greatestMinRight[i] = *p;
+			}
+			else
+				greatestMinRight[i] = INT_MIN;
+		}
 
-		ng[i] = s.size();
-		s.push(i);
+		s.insert(a[i]);
 	}
 ```
+
 
 
 ***
@@ -41,7 +68,7 @@
 
 		while(!s.empty()){
 			ans[s.top()] = -1;
-			s.pop();
+			s.pop();		//dont forget this line
 		}
 
 		return ans;

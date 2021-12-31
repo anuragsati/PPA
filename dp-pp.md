@@ -1,12 +1,11 @@
 # Problems that can be reduced to fibonacci 
-	f[i] = f[i+1] + f[i+2] 		//imp
-	f[i] = f[i-1] + f[i-2]
+	f[i] = f[i+1] + f[i+2]  ==	f[i] = f[i-1] + f[i-2]
 	...
 
 
 # Space reduction ideas
 -	Think in terms of backward DP
-	prolem might reduce in terms of fibonacci
+	problem might reduce in terms of fibonacci
 
 	space optimization is done mainly in backward DP.
 
@@ -15,7 +14,7 @@
 -	Recursion 
 	forward dp (top-down) 
 	backward(bottom-up) 
-	space reduction(fibonacchi)
+	space reduction(fibonacci)
 
 
 # PROBLEM LIST	: 	

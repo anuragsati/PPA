@@ -1,3 +1,14 @@
+### we use the concept of deque in sliding window to keep track of max and min in a window
+
+
+### 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+
+```c++
+
+```
+
+
+
 ### First negative integer in every window of size k  (https://practice.geeksforgeeks.org/problems/first-negative-integer-in-every-window-of-size-k3345/1#)
 
 	if value is negative push into queue
