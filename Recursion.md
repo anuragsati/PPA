@@ -1,3 +1,58 @@
+# Permutation without duplicates [special]
+- permutation can also be done like this just remove set 
+
+```c++
+	vector<vector<int>> ans;
+
+	void solve(vector<int> &a, int idx){
+		if(idx == a.size()-1){ //when we are at last index swap will occur with itself so just print it instead
+			ans.push_back(a);
+			return;
+		}
+
+        set<int> s;
+        for(int i=idx; i<a.size(); ++i){ //try bringing all elements at this position
+            if(s.count(a[i]))   //if we have already put this element at this place before we will not put it again
+                continue;
+
+            s.insert(a[i]);
+            swap(a[idx], a[i]); //bring element at this
+            solve(a, idx+1); //recurse for that element
+            swap(a[idx], a[i]); //backtrack
+        }
+		return;
+	}
+
+    // solve(nums, 0);
+};
+```
+
+# Subsets without duplicates [special]
+[https://leetcode.com/problems/subsets-ii/submissions/]
+
+- we only include element which occurs for first time or it is not equal to its previous
+- jaise jaise subset bnata ja rha hai waise waise add krte ja [KEY_POINT]
+
+- special type of recursion : for loop subset recursion
+    isme hmesha jaise jaise bnte ja rhe hain waise waise add krte jao
+
+```c++
+    void solve(int idx, vector<int> &a){
+
+        ans.push_back(temp);
+
+        for(int i=idx; i<a.size(); ++i){
+            if(i==idx || a[i] != a[i-1]){
+                temp.push_back(a[i]);
+                solve(i+1, a);
+                temp.pop_back();
+            }
+        }
+
+        return;
+    }
+```
+
 # ways to add paranthesis to solve equation
 
 fun(l, r) ==== return total answers after solving equation 
@@ -123,13 +178,11 @@ public:
 
 
 
-# Tower of Hanoi
-	The minimal number of moves required to solve the Tower of Hanoi n disks is (2^n) − 1.
-
-	
 
 ***
 ### Lexicographically printing subsets
+-    phle mai khud ko print kr leta hu fir baad mai mere baad wale aayenge
+
 first sort the array
 
 vector<int> subset;

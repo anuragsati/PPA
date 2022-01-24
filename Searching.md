@@ -444,7 +444,48 @@ while(l <= h){
 
 
 
+# First and last occurance (easy way)
+```c++
+  int first_occurance(int x, vector<int> &a){
+      int l=0, r=a.size()-1;
+      int ans = -1;
+      while(l<=r){
+          int mid = l + (r-l) / 2;
 
+          if(a[mid] >= x){
+              ans = mid;
+              r = mid - 1;
+          }
+          else
+              l = mid + 1;
+      }
+
+      if(ans != -1 && x == a[ans])
+          return ans;
+      else
+          return -1;
+  }
+
+  int last_occurance(int x, vector<int> &a){
+      int l=0, r=a.size()-1;
+      int ans = -1;
+      while(l<=r){
+          int mid = l + (r-l) / 2;
+
+          if(a[mid] <= x){
+              ans = mid;
+              l = mid + 1;
+          }
+          else
+              r = mid - 1;
+      }
+
+      if(ans != -1 && x == a[ans])
+          return ans;
+      else
+          return -1;
+  }
+```
 
 ### Upper bound (STL)
 if a[mid] <= x then this could not be answer because we want elements strictly greater than x so l = mid+1

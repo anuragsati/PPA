@@ -1,3 +1,76 @@
+### Furthest/last greater element (FGE)  [VVVVVIMP]
+[https://leetcode.com/submissions/detail/588051869/]
+
+
+```c++
+    //suff max will be monotonically decreaseing
+    //5 5 5 4 4 2 2 1 
+	int searchRight(int idx, int val, vector<int> &suff){
+		int n = suff.size();
+		int l = idx+1, r = n-1;
+		int ans = -1;
+
+		while(l<=r){
+			int mid = l + (r-l) / 2;
+
+			if(suff[mid] >= val){
+				ans = mid;
+				l = mid + 1;
+			}
+			else
+				r = mid - 1;
+		}
+
+		return ans;
+	}
+
+
+    //pref max will be monotonically increasing
+	int searchLeft(int idx, int val, vector<int> &pref){
+		int n = pref.size();
+		int l = 0, r = idx-1;
+		int ans = -1;
+
+		while(l<=r){
+			int mid = l + (r-l) / 2;
+
+			if(pref[mid] >= val){
+				ans = mid;
+				r = mid - 1;
+			}
+			else
+				l = mid + 1;
+		}
+
+		return ans;
+	}
+
+
+    int main() {
+        //create prefix max array
+		vector<int> prefMax(n);
+		for(int i=0; i<n; ++i){
+			if(i==0) prefMax[i] = a[i];
+			else prefMax[i] = max(prefMax[i-1], a[i]);
+		}
+
+        //create suffix max array
+		vector<int> suffMax(n)
+		for(int i=n-1; i>=0; --i){
+			if(i==n-1) suffMax[i] = a[i];
+			else suffMax[i] = max(suffMax[i+1], a[i]);
+		}
+
+        //at every point do a binary search on prefix and suffix max array to find FGE
+        //because pref & suff max arrays are monotonic 
+		for(int i=0; i<n; ++i){
+			int lastRight = searchRight(i, a[i], suffMax);
+			int firstLeft = searchLeft(i, a[i], prefMax);
+		}
+    }
+```
+
+
 ### whenever we need to optimize better than O(n) then it is either using -1 or using encoding
 
 
