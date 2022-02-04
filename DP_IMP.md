@@ -381,6 +381,8 @@ coices :
 
 # ================================= LIS =================================
 
+- Longest/Largest something subsequence is LIS variation
+
 #### LIS
 - at every index check all previous index for lis jiske piche mai chipak skta hu
 ```c++
@@ -400,6 +402,43 @@ coices :
         }
 
         return ans;
+    }
+```
+
+### printing LIS
+- we create lis as vector of pairs [lis length , where that lis originated from]
+
+```c++
+    vector<pair<int, int>> lis(n);
+
+    for(int i=0; i<n; ++i){
+        lis[i] = {1, -1};
+
+        for(int j=0; j<i; ++j){
+            if(lis[j].first + 1 >= lis[i].first){
+                lis[i] = {lis[j].first + 1, j};
+            }
+        }
+    }
+
+    //find the lis index
+    int idx=0, mx=INT_MIN;
+    for(int i=0; i<n; ++i){
+        if(lis[i].first >= mx){
+            mx = lis[i].first;
+            idx = i;
+        }
+    }
+
+    //reconstruct lis array by moving back from lis index
+    vector<int> ans;
+    while(idx != -1){
+        ans.push_back(a[idx]);
+        idx = lis[idx].second;
+    }
+
+    reverse(ans.begin(), ans.end());
+    return ans;
     }
 ```
 
@@ -707,3 +746,56 @@ can also be done in O(n) space using prev. row only
 
 - It is used when we have to store whole vector as a state
 - beauty of bitmasking is that you can represent whole vector using just an integer
+- Gnerally used in game theory problems
+
+
+### Can i win [IMPORTANT]
+[https://leetcode.com/problems/can-i-win/]
+
+
+
+
+
+# ================================= Kadane's algo =================================
+### Kadane's algo [https://www.youtube.com/watch?v=VMtyGnNcdPw]
+
+if we can include this element in curr sum i.e ele + curr sum > 0 then we include it
+else we exclude it and set subarray to 0
+
+l = left bound of max subarray 
+r = right bound
+
+```c++
+	int csum = 0, osum = 0, l=0;
+	for(int i=0; i<n; ++i){
+		if(csum + a[i] < 0){ //exclude and set subarray to 0 bcx this element is negative(guaranteed)
+			csum = 0;
+			l = i+1;//start subarray from next i+1 index
+		}
+		else{ //include in running sum
+			csum += a[i];
+		}
+
+		if(csum > osum){
+			osum = csum;
+			ans = {l, i};       //answer of max subarray
+		}
+	}
+```
+
+
+
+
+
+
+
+# ================================= Random Important Questions =================================
+
+### Valid paranthesis string
+[https://leetcode.com/problems/valid-parenthesis-string/]
+[https://leetcode.com/problems/valid-parenthesis-string/discuss/347113/Top-down-recursive-solution-%2B-DP-memoization-(~1-ms)]
+
+In bracket questions we always keep (index, open paranthesis till now) as state
+when we encounter (  => open++
+when we encounter )  => open--
+

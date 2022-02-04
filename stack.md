@@ -1,3 +1,7 @@
+### 132 pattern
+[https://leetcode.com/problems/132-pattern/]
+
+
 ### Furthest/last greater element (FGE)  [VVVVVIMP]
 [https://leetcode.com/submissions/detail/588051869/]
 
@@ -85,7 +89,7 @@
 
 
 
-### greatest minimum on right (uses binary search)
+### greatest minimum on right (uses binary search) (nlogn)
 we traverse from right to left and maintain a multiset(repeated elements)
 for each index we encounter we search in the set the max value which is smaller than current
 
@@ -111,6 +115,22 @@ for each index we encounter we search in the set the max value which is smaller 
 		s.insert(a[i]);
 	}
 ```
+
+- ====== can also be done in O(n) =======
+we try to find max element which is smaller than current element on right  ------->
+alternatively 
+for every right we try to find next greater element of left <--------
+
+ex :
+3 5 0 3 4
+for 5 we are finding 4 but we can say for 4 we try to find next greater on left which is 5 (prev greater element)
+
+
+
+
+
+
+
 
 
 

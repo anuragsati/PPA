@@ -1,3 +1,36 @@
+### Finding total max/min peaks in array [IMPORTANT]
+[https://leetcode.com/problems/wiggle-subsequence/]
+
+- if prevdiff is + and currdiff is - then this is possible answer
+- if prevdiff is - and currdiff is + then this is possible answer
+    we update prevdiff to currentdiff in these cases
+    else we move forward
+
+- initially if array is like / or \ then ans is 2 else if it is equal then ans is 1
+
+basically we are skipping middle elements which are not peaks
+
+```c++
+    int wiggleMaxLength(vector<int>& a) {
+        int n = a.size();
+        if(n < 2)
+            return n;
+
+        int prevdiff = (a[1]-a[0]);
+        int ans = (prevdiff != 0) ? 2 : 1;
+
+        for(int i=2; i<n; ++i){
+            int diff = a[i]-a[i-1];
+
+            if((diff>0 && prevdiff<=0) || (diff<0 && prevdiff>=0)){
+                ++ans;
+                prevdiff = diff;
+            }
+        }
+
+        return ans;
+    }
+```
 ### mostly in stream/running questions max/min heap is the idea
 
 

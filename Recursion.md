@@ -1,5 +1,6 @@
 # Permutation without duplicates [special]
 - permutation can also be done like this just remove set 
+- can be used in subset as well but careful it uses extra space
 
 ```c++
 	vector<vector<int>> ans;

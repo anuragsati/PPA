@@ -1,3 +1,14 @@
+### If we want to remove kth element from end we need to move fast by k+1 from front to reach parent of kth node
+[https://leetcode.com/problems/remove-nth-node-from-end-of-list/]
+
+
+
+
+### In linked list questions always add dummy head for better edge case handling [vvvimp]
+
+
+
+
 ### Insert procedure is just merging of 2 linked lists
 	one LL : 		1 -> 2 -> 6 -> 7
 	other LL : 		3
@@ -67,6 +78,15 @@ use pointer to pointer but you will have to modify the code a bit
 
 		if(meet == NULL)	//no cycle found
 			return 0;
+
+
+        //using floyd's algo we need to move l1 dist from d 
+		//i.e we need to move until head and meet meet
+		ListNode* start = head;
+		while(start != meet){
+			start = start->next;
+			meet = meet->next;
+		}
 	}
 ```
 
@@ -132,7 +152,7 @@ use pointer to pointer but you will have to modify the code a bit
 ```c++
 	void solve(ListNode* prev, ListNode* curr, ListNode* head){
 		if(curr == NULL){
-			ans = prev; //this is the new head
+			head = prev; //this is the new head
 			return;
 		}
 

@@ -168,9 +168,8 @@ In arrays, we can do random access as elements are continuous in memory. Let us 
 	the idea is to sort x and y coordinates separately and caluculate ans. separately because x any y don't affect each other
 	find pattern in x and y 
 
-```c++
+    if we know answer for previous then we just need to know how to get current answer using previous
 
-```
 
 
 

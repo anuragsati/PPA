@@ -60,7 +60,7 @@ so we calculate a suffix array to store max index after an index
 
 
 
-# another way of recursion
+# another way of recursion {not really recursion it is iteration}
 [https://leetcode.com/problems/decode-string/]
 
 ```c++

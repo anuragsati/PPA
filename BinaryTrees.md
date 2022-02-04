@@ -1,3 +1,42 @@
+### Path sum 3 (using hashing in trees)
+[https://leetcode.com/problems/path-sum-iii/]
+
+at every node we take prefix of parent nodes and we insert this prefix in map
+when we finish executing this node we remove this prefix from map
+at each prefix we do ans += m[prefix-target]
+
+
+
+
+
+
+
+### search for list in Binary tree
+[https://leetcode.com/problems/linked-list-in-binary-tree/]
+
+we can search linearly in each tree by moving next pointer in arguments
+think like :
+    if match then search for next element below
+    if dont match then return false
+
+```c++
+    //return true if there is LL matching starting from this point
+    bool search(ListNode* head, TreeNode* root){
+        if(head == NULL)
+            return true;
+        if(root == NULL && head != NULL)
+            return false;
+        
+        if(head->val != root->val)
+            return false;
+
+        return search(head->next, root->left) || search(head->next, root->right);
+    }
+```
+
+
+
+
 ### whenever we need to make balanced bst we divide and conquer using mid element
 
 
@@ -399,6 +438,9 @@ Node *RemoveHalfNodes(Node *root) {
 
 
 
+
+
+
 ***
 ### ITERATIVE TRAVERSALS
 the element that needs to be processed next must come at top of the stack
@@ -468,7 +510,7 @@ the element that needs to be processed next must come at top of the stack
 			s.pop();
 
 			if(node.second == 2){
-				ans.dpush_back(node.first->val);
+				ans.push_back(node.first->val);
 			}
 			else{
 				if(node.first->right)
