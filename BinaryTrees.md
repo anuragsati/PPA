@@ -1,3 +1,42 @@
+### Binary tree from Levelorder and inorder[imp]
+[https://practice.geeksforgeeks.org/problems/construct-tree-from-inorder-and-levelorder/1#]
+
+- Root is that node which comes up first in level order
+- from l to r search which node comes first in levelorder
+
+```c++
+unordered_map<int, int> m;
+
+Node* solve(int l, int r, int* io, int* lo){
+    if(l > r)
+        return NULL;
+
+    //find which node comes first in levelorder that is node
+    pair<int, int> rv = {INT_MAX, l};
+    for(int i=l; i<=r; ++i){
+        rv = min(rv, {m[io[i]], i});
+    }
+
+    Node* root = new Node(io[rv.second]);
+    root->left = solve(l, rv.second-1, io, lo);
+    root->right = solve(rv.second+1, r, io, lo);
+    return root;
+}
+
+Node* buildTree(int inorder[], int levelorder[], int iStart, int iEnd,int n) {
+    for(int i=0; i<n; ++i)
+        m[levelorder[i]] = i;
+
+    return solve(0, n-1, inorder, levelorder);
+}
+```
+
+
+
+
+
+
+
 ### Path sum 3 (using hashing in trees)
 [https://leetcode.com/problems/path-sum-iii/]
 

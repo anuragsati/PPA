@@ -1,5 +1,17 @@
 ==========================================
-# radix sort
+# Quick Select [IMP]
+[https://www.youtube.com/watch?v=fnbImb8lo88]
+[https://leetcode.com/problems/kth-largest-element-in-an-array/submissions/]
+
+- Quickselect is a textbook algorthm typically used to solve the problems "find kth something":
+    -   kth smallest
+    -   kth largest
+    -   kth most frequent (just use quickselect on map of frequency)
+    -   kth less frequent
+
+-   It has O(N) average time complexity. 
+    worst case T.C = O(N^2), although the probability of this worst-case is negligible.
+
 
 
 

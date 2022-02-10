@@ -581,10 +581,20 @@ can also be done in O(n) space using prev. row only
 
 
 ### Longest palindromic subsequence (LPS)
+- this can be done using LCS
+    we find lcs between s and reverse(s)
+    then LPS = N - LCS
+
+- this can also be done using code for LPS also (l, r) method that is in MCM
+
+- remember to put l > r condition bcz of even length palindromes
+    when xxxxAAxxxx
+    when l=A r=A then after doing 2 + solve() we will reach l > r
+
 
 ```c++
     int lps(int l, int r, string &s, vector<vector<int>> &dp){
-        if(l > r)
+        if(l > r)       //important in case of 2 middle elements
             return 0;
         else if(l==r)
             return 1;
@@ -596,6 +606,18 @@ can also be done in O(n) space using prev. row only
             return dp[l][r] = 2 + lps(l+1, r-1, s, dp);
         else
             return dp[l][r] = max(lps(l+1, r, s, dp), lps(l, r-1, s, dp));
+    }
+```
+
+### Min insertions to make palindrome
+
+just do n - LPS that will be number of elements that are not palindrome so we insert accordingly to them
+
+```c++
+    int minInsertions(string s) {
+        int n = s.size();
+        int LPS = LPS(0, n-1, s, dp);
+        return n - LPS;
     }
 ```
 
@@ -642,6 +664,35 @@ can also be done in O(n) space using prev. row only
 
 
 
+
+### Longest Repeating subsequence
+[https://practice.geeksforgeeks.org/problems/longest-repeating-subsequence2004/1/#]
+
+idea : same as LCS but we just add a simple condition
+    that when both characters are same they must not be at same index
+
+```c++
+    int solve(int n, int m, string &s, vector<vector<int>> &dp){
+        if(n<0 || m<0)
+            return 0;
+        
+        if(dp[n][m] != -1)
+            return dp[n][m];
+
+        if(s[n] == s[m] && n != m)
+            return dp[n][m] = 1 + solve(n-1, m-1, s, dp);
+        else
+            return dp[n][m] = max(solve(n-1, m, s, dp), solve(n, m-1, s, dp));
+    }
+
+    int LRS(string s){
+        int n = s.size();
+        vector<vector<int>> dp(n+1, vector<int> (n+1, -1));
+        return solve(n-1, n-1, s, dp);
+    }
+```
+
+### Longest 
 # ================================= Diagonal DP =================================
 
 ### MCM
@@ -741,6 +792,47 @@ can also be done in O(n) space using prev. row only
     }
 ```
 
+### Bursting baloons
+[https://leetcode.com/problems/burst-balloons/]
+
+[https://www.youtube.com/watch?v=VFskby7lUbw]
+
+idea : 
+    we delete a balloon add its coins and then make a function call to [0, i] [i, r]
+    but there is a problem if we delete a ballon first then the subproblems are not unique
+
+-    hence we think of popping a baloon in last that way we know ans for [l, i] [i, r] and current = a[l] * a[i] * a[r]
+
+```c++
+    int solve(int l, int r, vector<int> &a, vector<vector<int>> &dp){
+        if(l > r)
+            return 0;
+        
+        if(dp[l][r] != -1)
+            return dp[l][r];
+
+        int ans = 0;
+        for(int i=l+1; i<r; ++i){
+            ans = max(ans, a[l] * a[i] * a[r] + solve(l, i, a, dp) + solve(i, r, a, dp));
+        }
+        return dp[l][r] = ans;
+    }
+
+    int maxCoins(vector<int>& nums) {
+        int n = nums.size();
+
+        //adding padding to nums
+        // 1 ......nums.........1
+        vector<int> a(n+2);
+        a[0] = 1;
+        for(int i=0; i<n; ++i)
+            a[i+1] = nums[i];
+        a[n+1] = 1;
+
+        vector<vector<int>> dp(n+10, vector<int> (n+10, -1));
+        return solve(0, n+1, a, dp);
+    }
+```
 
 # ================================= Bitmasking DP =================================
 
@@ -799,3 +891,16 @@ In bracket questions we always keep (index, open paranthesis till now) as state
 when we encounter (  => open++
 when we encounter )  => open--
 
+
+
+### Max Square with 1 in a matrix
+[https://leetcode.com/problems/maximal-square/]
+
+- can also be done using max area rectangle
+
+- dp[i][j] = max square ending at this cell with side dp[i][j]
+
+- dp[i][j] = min(min(dp[i][j-1], dp[i-1][j-1]) , min(dp[i-1][j-1], dp[i-1][j])) + 1
+           = min(dp[i][j-1], dp[i-1][j-1], dp[i-1][j]) + 1;
+
+basically we are trying to find minimum side till which we can extend in upper direction

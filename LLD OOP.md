@@ -13,6 +13,7 @@ classes methods may behave differenly for diff objects bcz diff objects have dif
         }
     ```
 
+- always hide instance variables
 
 
 
@@ -157,3 +158,61 @@ copy constructor :
     A obj2(obj1)    //10, 20 (copied from obj1)
     ```
 
+
+### [This] keyword
+used for self referencing purpose
+this means get the object which has been used to invoke this function
+
+- this can be used on functions as well as variables
+- this can't be used on static things as they are local to object
+
+- using this we can call constructors (also called constructor chaining)
+
+    class file{
+    public:
+        file(){
+            cout << "default" << endl;
+        }
+
+        file(int x){
+            file();
+            cout << "hey " << x << endl;
+        }
+    };
+
+- we can send or return current object using this
+
+
+
+
+
+
+
+# ================================= PRINCIPLES OF OOP =================================
+
+- Abstraction
+- Encapsulation
+- Polymorphism
+- Inheritance
+
+
+
+
+# Abstraction
+the art of showing only that code which is useful and abstracting out other
+making data / functions into private / public  ...
+
+ex : we use private to hide all the functions that are not necessary for client and using public we only show useful functions
+ex : making something complex into functions such as black box (ex sqrt function)
+
+
+
+
+# Encapsulation (data hiding)
+when an object expresses only selected info
+- bundling of data with methods that operate on that data
+i.e you cant access private data ... every private data is bundled with its own class and getter and setter 
+
+
+- data members must be private so that others will not be able to directly access them
+- we can only access private things by public getters and setters with right set of rules
