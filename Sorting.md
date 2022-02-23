@@ -12,6 +12,16 @@
 -   It has O(N) average time complexity. 
     worst case T.C = O(N^2), although the probability of this worst-case is negligible.
 
+- Quick select is different from quicksort
+    in quickselect we are only making call to one half not both halfs like quicksort
+
+    here if we use hoares selection algo for random element we could get O(n) avg time
+
+    at each step we divide array in 2 parts
+    N + N/2 + N/4 + N/8 ....
+    N (1/2 + 1/4 + 1/8 ....)
+
+    O(N)    [this sum can never reach 1]
 
 
 

@@ -1,3 +1,21 @@
+### Iterative order traversal matching
+[https://practice.geeksforgeeks.org/problems/print-common-nodes-in-bst/1/]
+[https://practice.geeksforgeeks.org/problems/predecessor-and-successor/1/]
+
+- using stack and getleft
+
+
+
+
+### BST Invalid pairs
+[https://practice.geeksforgeeks.org/problems/pairs-violating-bst-property/1#]
+
+- can be solved by counting inversions
+
+
+
+
+
 ### preorder / postorder to bst
 
 -	method 1 : naive O(n^2)
@@ -194,7 +212,10 @@ just like check if tree is bst or not except here we need one more data i.e size
 
 
 ### Check if tree is BST or not
-- method 1 : check if inorder traversal is sorted or not (do it by maintaining prev pointer in recursion)
+- method 1 : check if inorder traversal is sorted or not 
+    do it by maintaining prev pointer in recursion (iterative inorder traversal using stack) 
+
+
 
 - method 2 : recursion
 	just checking if root>left && root < right will not help
@@ -203,14 +224,15 @@ just like check if tree is bst or not except here we need one more data i.e size
 		if right subtree is bst
 		and current node value is greater than max value of left tree and smaller than min value of right tree
 
+[redundant_state_bool]
 ```c++
 	// [bool, <max, min>]
 	pair<bool, pair<ll, ll> > solve(TreeNode* root){
 		if(!root)
 			return {true, {LONG_LONG_MIN, LONG_LONG_MAX}};
 		
-		pair<bool, pair<ll, ll> > lst = solve(root->left);
-		pair<bool, pair<ll, ll> > rst = solve(root->right);
+		auto lst = solve(root->left);
+		auto rst = solve(root->right);
 
 		ll mx = max({(ll)root->val, lst.second.first, rst.second.first});
 		ll mn = min({(ll)root->val, lst.second.second, rst.second.second});
@@ -229,6 +251,37 @@ just like check if tree is bst or not except here we need one more data i.e size
     }
 ```
 
+- [just check if root is greater than left's max and smaller than right's min]
+```c++
+    #define ll long long
+    const ll inf = 1e10;
+
+    int isbst;
+
+    pair<ll, ll> solve(TreeNode* root){
+        if(!root)
+            return {inf, -inf};
+
+        auto lst = solve(root->left);
+        auto rst = solve(root->right);
+
+        if(!(lst.second < root->val && root->val < rst.first))
+            isbst = false;
+        
+        int mn = min({(ll)root->val, lst.first, rst.first});
+        int mx = max({(ll)root->val, lst.second, rst.second});
+        return {mn, mx};
+    }
+
+    bool isValidBST(TreeNode* root) {
+        isbst = true;
+        solve(root);
+        return isbst;
+    }
+```
+
+
+
 - method 3 : using intervals/ranges in recursion
 	intial interval (-inf, inf)
 	if we move to right subtree then left interval increases
@@ -242,7 +295,7 @@ just like check if tree is bst or not except here we need one more data i.e size
 		if(!root)
 			return;
 
-		if(!(root->val > lb && root->val < ub)){
+		if(!(lb < root->val && root->val < ub)){
 			ans = false;
 			return;
 		}
@@ -330,12 +383,12 @@ class Solution {
 		cur->val = lmax->val;
 
 		//delete lmax (it can have 0 or 1 child)
-		//only one child
+		//0 child
 		if(!lmax->left && !lmax->right){
 			remove_leaf(lmax, newpar);
 		}
 
-		//2 child
+		//1 child
 		else if(!lmax->left || !lmax->right){
 			remove_single_child(lmax, newpar);
 		}

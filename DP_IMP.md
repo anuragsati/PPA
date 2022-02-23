@@ -230,6 +230,40 @@ func(n, sum) ==> total ways to make sum using elements [0....n]
 - we need to find subset whose `sum = s1`
 
 
+### sum closest to target
+[https://leetcode.com/problems/closest-dessert-cost/]
+
+- we try to make every subset and at each step we check if we are closest or not
+- closest can be greater as well
+- we can memoise as well we will just return if we arrive at one solution
+
+```c++
+    const int inf = 1e9;
+    int ans = inf;
+    int diff = inf;
+
+    void solve(int i, int curr, vector<int> &a, int target){
+        //if current sum is closer to target update it
+        if(abs(target-curr) < diff){
+            diff = abs(target - curr);
+            ans = curr;
+        }
+
+        if(target < curr)
+            return;
+        if(i>=a.size())
+            return;
+
+        //take it or leave it
+        solve(i+1, curr+a[i], a, target);
+        solve(i+1, curr, a, target);
+        return;
+    }
+```
+
+
+
+
 
 
 
@@ -439,8 +473,95 @@ coices :
 
     reverse(ans.begin(), ans.end());
     return ans;
+```
+
+
+### LIS in O(n Logn)
+
+- Part of "patience sort"
+
+- LIS : lower bound
+
+- 1 2 3 7 9 11   [8]
+          ^
+    replace this 9 by smaller number to increase chances in future
+
+- 1 2 3 4 5 8     [3]
+      ^
+      replace this 3 by 3 bcz it is equal (lower bound)
+      we cannot replace 4 bcz that would create lis [1 2 3 3] which is not strictly increasing
+
+- elements can't repeat in ans array as we are taking lower bound which replaces repeating elements
+- ans array does not contain lis subsequence
+- we can create lis vector just like we used to do in O(n^2) method 
+- cant reconstruct lis using nlogn method
+
+```c++
+    vector<int> ans;
+
+    for(int i=0; i<n; ++i){
+        // find a[i] in ans (next greater of a[i]) (if equal just replace)
+        int p = lower_bound(all(ans), a[i])-ans.begin();        
+
+		if(p < ans.size()) 		// update then next neighbour bcx it may increase sub. in future
+            ans[p] = a[i];
+        else                    // append in ans bcz a[i] is greater than all
+            ans.push_back(a[i]);
+    }
+
+    cout << ans.size();     // returns lis
+```
+
+
+### Constructing LIS array O(n Logn)
+```c++
+    vector<int> ans;
+
+    for(int i=0; i<n; ++i){
+        int p = lower_bound(all(ans), a[i])-ans.begin();        
+
+		if(p < ans.size()){
+            lis[i] = p+1;
+            ans[p] = a[i];
+        }
+        else{                   
+            lis[i] = ans.size()+1;
+            ans.push_back(a[i]);
+        }
+    }
+
+    //lis array contains lis of all indices
+
+```
+
+
+### Longest Non decreasing subsequence
+
+- in LIS we use lower bound 
+- in LNDS we use upper bound 
+    because there can be same elements
+
+- 1 2 3 3 3 3 4 5 8     [3]
+              ^ 
+      replace this 4 by 3 bcz it increases sequence to 1 2 3 3 3 3 3
+      we are replacing 4 by smaller number it might increase LNDS in future
+    
+```c++
+    for(int i=0; i<n; ++i){
+        auto p = upper_bound(ans.begin(), ans.end(), a[i]) - ans.begin();
+
+        if(p < ans.size()){
+            lis[i] = p+1;
+            ans[p] = a[i];
+        }
+        else{
+            lis[i] = ans.size()+1;
+            ans.push_back(a[i]);
+        }
     }
 ```
+
+
 
 
 # ================================= LCS =================================
@@ -692,7 +813,52 @@ idea : same as LCS but we just add a simple condition
     }
 ```
 
-### Longest 
+### Longest Common Substring [imp]
+
+- very unique dp
+- fun(i, j) : length of max substring ending at i, j
+    if(a[i] == b[j])
+        then ans is 1 + fun(i-1, j-1)
+    else
+        ans is 0 bcz if two strings end at diff char they cant be same/common
+
+- O(n^2) we do it for every state
+
+- we can use this type of dp in conflicting return
+
+```c++
+    int solve(int n, int m, vector<int>& a, vector<int>& b, vector<vector<int>> &dp){
+        if(n < 0 || m < 0)
+            return 0;
+        
+        if(dp[n][m] != -1)
+            return dp[n][m];
+
+        if(a[n] == b[m])
+            return dp[n][m] = 1 + solve(n-1, m-1, a, b, dp);
+        else
+            return dp[n][m] = 0;
+    }
+
+    int findLength(vector<int>& a, vector<int>& b) {
+        int n = a.size();
+        int m = b.size();
+
+        int ans = 0;
+        vector<vector<int>> dp(n, vector<int> (m, -1));
+
+        //we calculate ans for every state
+        for(int i=0; i<n; ++i){
+            for(int j=0; j<m; ++j){
+                ans = max(ans, solve(i, j, a, b, dp));
+            }
+        }
+
+        return ans;
+    }
+```
+
+
 # ================================= Diagonal DP =================================
 
 ### MCM
@@ -882,6 +1048,16 @@ r = right bound
 
 
 # ================================= Random Important Questions =================================
+
+### Flight with k stops
+[https://leetcode.com/problems/cheapest-flights-within-k-stops/]
+
+
+we can reduce this to that [IMP]
+    ans = solve(x.first, k-1, cost + x.second);
+    ans = x.second + solve(x, k-1);
+
+
 
 ### Valid paranthesis string
 [https://leetcode.com/problems/valid-parenthesis-string/]

@@ -1,3 +1,52 @@
+### Parallel LCA [IMP]
+[https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/]
+
+- lca is not only for 2 nodes 
+- just like we have parallel bfs we also have parallel lca
+- all nodes that are potential we mark them lca and return 
+
+
+
+
+
+
+# Construction of binary trees is generally done using
+-   taking left and right subtree index 
+    solve(l, r, pl, pr)
+
+-   using index finding using hashing 
+    we have to find index of right or left subtree
+
+
+
+### Binary tree from pre and post [VVVVV_imp]
+[https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/]
+
+- In preorder :
+    N L R
+    the first node after rooot is head of left subtree
+- In postorder :
+    L R N
+    First node after root is right subtrees head
+
+[1, 2, .......]
+[0...2.......1]
+
+that means [2....] in pre order is left subtee and [0 ... 2] in post order is right subtree
+we just need to find where 2 occur in postorder 
+then before that 2 will be left subtere and after it will be right (L R N)
+
+
+[N *L*LLLLLLL *R*RRRRR]
+[LLLLLLL*L* RRRRR*R* N]
+
+- first L in pre is last L in post
+
+
+
+
+
+
 ### Binary tree from Levelorder and inorder[imp]
 [https://practice.geeksforgeeks.org/problems/construct-tree-from-inorder-and-levelorder/1#]
 
@@ -99,26 +148,40 @@ like this
 -	postorder + inorder
 
 
+
+
+
 ### 2*i+1 and 2*i+2  happens only in complete binary treee
 -	and it can be done using queues
+[https://practice.geeksforgeeks.org/problems/make-binary-tree/1#]
+
+
 
 
 
 ### serialization / deserialization
+[https://leetcode.com/problems/serialize-and-deserialize-binary-tree/]
+
+- Serialization : Preorder with nulls 
+    - we can use '#' as sperator in serialization
+    - we can use 'N' for null nodes bcz many times -1 can be a valid value of node
+
+- Deserialization : Running recursion with referece index
+
 	in deserialization after first call to left finishes the (++idx) will point to right subtrees first node
 	bcz we are moving idx using reference
 
-	like this
-
-	node* solve(vector<int> &pre, int &idx){
-		if(idx >= pre.size())
-			return NULL;
-		
-		node* temp = newNode(pre[idx]);
-		temp->left = solve(pre, preLN, ++idx);
-		temp->right = solve(pre, preLN, ++idx);
-		return temp;
-	}
+    ```c++
+        node* solve(vector<int> &pre, int &idx){
+            if(idx >= pre.size())
+                return NULL;
+            
+            node* temp = newNode(pre[idx]);
+            temp->left = solve(pre, preLN, ++idx);
+            temp->right = solve(pre, preLN, ++idx);
+            return temp;
+        }
+    ```
 
 
 
@@ -409,12 +472,16 @@ https://www.youtube.com/watch?v=EBTku_aIPXk
 *** 
 ### LCA [VVV IMP] O(n) O(H)
 [https://www.youtube.com/watch?v=13m9ZCB8gjw]
+[https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/]
+[https://practice.geeksforgeeks.org/problems/min-distance-between-two-given-nodes-of-a-binary-tree/1]
 
 	works only if elements are unique
 	
 	corner case : if both elements are in same subtree then it will return LCA 
 		but if one of the elements is not presesnt it will still return LCA so make sure both elements are present in tree
 		you can do that by applying dfs afterwards
+
+- check if both nodes are in tree or not
 
 
 ```c++
@@ -434,6 +501,11 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 		return NULL;
 	
 	return (lst ? lst : rst);
+}
+
+main(){
+    if(NodesInTree(root, p, q))
+        lowestCommonAncestor(root, p, q);
 }
 ```
 
