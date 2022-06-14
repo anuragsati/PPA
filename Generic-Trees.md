@@ -1,10 +1,81 @@
 
+### Diameter (double dfs method) O(n)
+[https://cses.fi/problemset/task/1131/]
+[cp_handbook_notes]
+
+- tree is undirected graph
+-   First, we choose an arbitrary node a in the tree and find the farthest node b from a.
+    Then, we find the farthest node c from b.
+    The diameter of the tree is the distance between b and c.
+
+```c++
+    //maxdepth, maxnode
+    int mxdepth=-1, mxnode=-1; 
+
+    void dfs(int node, int par, int depth){
+        if(depth > mxdepth){
+            mxdepth = depth;
+            mxnode = node;
+        }
+
+        for(auto x : adj[node]){
+            if(x == par)
+                continue;
+            
+            dfs(x, node, depth+1);
+        }
+        return;
+    }
+
+    int main(){
+        //first dfs to find max dist node from root
+        dfs(1, -1, 0);
+
+        //second dfs to find max dist node from mxnode
+        //remember to reset maxdepth
+        mxdepth = -1;
+        dfs(mxnode, -1, 0);
+
+        cout << mxdepth;
+    }
+```
+
+
+
+
+
+
+### cleaner DFS (only when you want to visit whole tree and not detect leaf)
+- if it is leaf then it will not visit anything and return
+- detect leaf using adj.size()==1 and assigning dummy parent
+
+```c++
+    void dfs(int node, int par){
+        cout << node ;
+
+        for(auto x : adj[node]){
+            if(x != par) dfs(x, node);
+        }
+        return;
+    }
+
+    dfs(root, -1);      //current, parent
+```
+
+
+
+
+### Trees
 - Represented by adjacency list
 - by default edges are bidirectional
 - can be rooted or unrooted
+- no cycles so no need to check visited
+- only one path between 2 nodes
 
 
 ### Diameter 
+- diamerter of graph with 1 vertex is 0
+
 - If i change the root of tree height will change
 - diameter remains same
 

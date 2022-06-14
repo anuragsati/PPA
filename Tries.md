@@ -1,10 +1,11 @@
 ***
+
 - Tries are used when you want to find how many strings have `p` as prefix
 [https://leetcode.com/problems/implement-trie-prefix-tree/]
 
 - usually this process take serach : O(n*l) insert : O(n * l^2) delete : O(n^2 * l^2)
 
-- whenever there is something related to `prefix` think of trie
+- whenever there is something related to `prefix and string` think of trie
 
 
 ***

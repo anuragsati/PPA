@@ -1,3 +1,108 @@
+### subarray sum = k can be done using 2 pointer if there are no -ve
+
+
+
+
+### DNF problem (sort 0 1 and 2s)
+
+- 0s will be sorted similar to partition problem
+- 2s will be sorted similar but when we swap 2 we might mess up order 
+    so we will not immediately move forward we will fix this first one more time
+
+```c++
+    void Solution::sortColors(vector<int> &a) {
+        int n = a.size();
+        int l=-1, r=n;
+        for(int i=0; i<r; ++i){
+            if(a[i] == 0)
+                swap(a[i], a[++l]);
+            else if(a[i] == 2){
+                swap(a[i], a[--r]);
+                --i;
+            }
+        }
+    }
+```
+
+
+
+
+=======================================================
+# 2 pointer patterns (sliding window)
+- [https://leetcode.com/list/x1lbzfk3/]
+
+- [https://leetcode.com/discuss/general-discussion/657507/sliding-window-for-beginners-problems-template-sample-solutions/]
+
+- [https://leetcode.com/problems/frequency-of-the-most-frequent-element/discuss/1175088/C%2B%2B-Maximum-Sliding-Window-Cheatsheet-Template!]
+
+
+
+### generally `longest substring` is sliding window
+
+### exactly(k) = atmost(k) - atmost(k-1)
+
+### atmost trick : when you want to find number of subarray in range [a, b]
+    or when you want exactly k in a window
+[https://www.interviewbit.com/problems/numrange/]
+
+
+### [VVVIMP] subarrays with unique elements atmost equal to k
+
+- here at each point we get a valid substring ending at r
+- at each step we move r by 1 and try to adjust l to make window valid
+- at each point we get a valid window [l, r] 
+
+```c++
+    int lengthOfLongestSubstringKDistinct(string &s, int k) {
+        unordered_map<int, int> m;
+        int ans=0, n=s.size();
+        for(int r=0; r<n; ++r){
+            m[s[r]]++;   //hashmap to subarray ending at current indix
+
+            while(l<=r && m.size() > k){    //while to reduce window
+                m[s[l]]--;
+                if(m[s[l]]==0)
+                    m.erase(s[l]);
+                ++l;
+            }
+
+            //updating ans
+            ans += (r-l+1);     
+            // ans = max(ans, r-l+1) for longest substring with atmost k distinct
+        }
+
+        return ans;
+    }
+```
+
+
+
+
+
+=======================================================
+
+
+
+
+# Sum of all subarrays
+- standard problem
+- i can pick (i+1) elements on left and (n-i) on right to include this element
+
+```c++
+    ll SubArraySum(vector<int> arr) {
+        ll result = 0;
+    
+        // computing sum of subarray using formula
+        for (int i=0; i<n; i++)
+            result += (arr[i] * (i+1) * (n-i));
+    
+        // return all subarray sum
+        return result ;
+    }
+```
+
+
+
 # Ugly numbers (prime factors 2,3,5)
 [https://practice.geeksforgeeks.org/problems/ugly-numbers2254/1#]
 

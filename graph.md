@@ -1,3 +1,48 @@
+
+### 2 sets problems can be generally modelled to bipartite graph
+
+
+
+
+### Graph points 
+- in undirected grap total degree = 2 * number of edges
+- in directed ∑indegree = ∑outdegree
+
+- `regular graph` : graph with constant degree of each node
+
+- If a graph has no cycles then it must have n nodes and n-1 edges
+    i.e it must be a tree
+    we can check cycles like this too
+
+
+
+
+
+
+### Levels does not work in dijkstra like they do in bfs
+[https://leetcode.com/problems/cheapest-flights-within-k-stops/]
+
+    here we cant do level++ after each pass
+    because in dijkstra we can visit nodes in any order
+    so we will have to store levels too in queue
+
+    priority_queue <distance, node, level>
+    q.push(vector<int> {next_dist, next_node, curr_level+1});
+
+
+
+
+
+
+### Bfs is used to find shortest path in unweighted graph
+    even in weighted graph you can use but T.C is high
+    thats why we use dijkstra which is slight modification of bfs
+
+
+
+
+
+
 ### Centroids in a graph [imp]
 [https://leetcode.com/problems/minimum-height-trees/]
 
@@ -150,12 +195,25 @@ It turns out, that the final amortized time complexity is alpha(n), where alpha 
     update our neighbours
     move to neighbours in smallest priority
 
+- using bfs might give bad results as 
+    if we arrive at one node with 5000 wi visit tree
+    then we arrive at 4000 then we agin visit bcz it is smaller path
+    ...
+
+    rather than doing that we will visit that with smallest first 
+    so that we can prune larger paths
+
 - if we explore some node then it is guaranteed that that will be shortes bcz if it is not then shortest would have already
     visited it first
 
 
-- T.C : (V+E) Log V
-- S.C : O(V)
+- T.C : V + E Log V
+    we are not adding edges in constant time
+    we need logV time as in queue at one time there can be v^2 edges 
+    log(v^2) = log(v)
+
+- S.C : O(V^2)
+
 
 ```c++
 unordered_map<ll, vector<pll>> adj;

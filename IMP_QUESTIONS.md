@@ -1,3 +1,8 @@
+# Max index diff [suraj_bhaiya_question]
+[https://www.geeksforgeeks.org/given-an-array-arr-find-the-maximum-j-i-such-that-arrj-arri/]
+
+
+
 # special election
 [https://www.codechef.com/MARCH18B/problems/MINVOTE]
 

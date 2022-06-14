@@ -1,3 +1,59 @@
+### Morris traversal O(n) | O(1) space traversal [imp]
+[https://www.youtube.com/watch?v=wGXB9OWhPTg]
+
+
+- Inorder traversal
+    visit node only after left subtree is processed i.e when pred->right = cur
+
+    if cur->left is null then visit it as it is last
+    else 
+        first create link
+        then move to left
+```c++
+    TreeNode* getPredecessor(TreeNode* cur){
+        TreeNode* pred = cur->left;
+        while(pred->right && pred->right != cur){
+            pred = pred->right;
+        }
+        return pred;
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        TreeNode* cur = root;
+        while(cur){
+            if(cur->left == NULL){
+                ans.push_back(cur->val);
+                cur = cur->right;
+            }
+            else{
+                auto pred = getPredecessor(cur);
+
+                if(pred->right == NULL){
+                    pred->right = cur;
+                    // ans.push_back(cur->val);     [for preorder first push then visit left tree]
+                    cur = cur->left;
+                }
+                else{
+                    // ans.push_back(cur->val);     [for inorder first visit left tree then this]
+                    pred->right = NULL;
+                    cur = cur->right;
+                }
+            }
+        }
+        return ans;
+    }
+```
+
+- for postorder create similar thing but from right
+[https://leetcode.com/problems/convert-bst-to-greater-tree/]
+
+
+
+
+
+
+
+
 ### Parallel LCA [IMP]
 [https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/]
 

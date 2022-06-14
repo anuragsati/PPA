@@ -1,18 +1,108 @@
+### ncr for smaller numbers without using factorial
+- other way using pascal's triangle
+
+way to find nCr withoud creating pascal triangle:
+nCr = (n * n-1 * n-2 .... n-r+1) (n-r)! / r! * (n-r)!
+nCr = [n * n-1 * n-2 .... n-r+1] / r!
+
+[n * n-1 .... n-r+1] are r numbers bcz n - (n-r+1) + 1 = r
+and r! are also r numbers 
+so we just run a loop from 1 to r and calculate this [remember to divide after bcz of floating issues]
+
+first multiply then divide
+
+- T.C : O(r)
+
+```c++
+    int C(int N, int r) {
+        r = max(r, N-r);    //for better complexity
+        int ans = 1;
+        for(int i=1; i<=r; ++i)
+            ans = ans * (N-r+i) / i;
+        return ans;
+    }
+```
+
+
+
+### how to calculate gcd of array except self ? 
+[https://www.hackerrank.com/challenges/the-chosen-one/problem]
+    just calculate prefix gcd and suffix gcd
+
+
+
+
+
+
+### most questions of number theory can be solved with sieve
+
+
+
+
+
+
+
+### Smaller spf method
+- if spf == -1 means it is not set then set spf of all multiples of i
+    if spf[j] == -1 means it has not set before then set it otherwise it already has spf
+
+```c++
+    const int mxA = 1000010;
+    vector<int> spf(mxA, -1);
+
+    void calculate_spf(){
+        for(int i=2; i*i<=mxA; ++i){
+            if(spf[i] == -1){
+                for(int j=i; j<mxA; j+=i){
+                    if(spf[j] == -1)
+                        spf[j] = i;
+                }
+            }
+        }
+    }
+
+    //get prime factors of n
+    unordered_map<int, int> m;
+    while(spf[n] != -1){
+        m[spf[n]]++;
+        n /= spf[n];
+    }
+    if(n > 1) m[n]++;
+```
+
+
+
+
+### binary search is better than Ternary search
+    bcz of constants
+    in b.s we do only 1 comparison
+    but in t.s we do 2 comparison that creates a difference
+
+    
+### sum of deviations is minimum from median
+
+
+
+
 ### Prime factors  (sqrt(n))
 
 Can be done in log(n) per query
+using spf
 
 ```c++
+    //power, prime factor
 	vector<pair<int, long long>> val;
 	for (long long i = 2; i * i <= n; ++i) {
-		int cnt = 0;
-		while (n % i == 0) {
-			++cnt;
-			n /= i;
-		}
-		if (cnt > 0) {
-			val.push_back({cnt, i});
-		}
+        if(n%i==0){
+            int cnt = 0;
+            //suck all primes
+            while (n % i == 0) {
+                ++cnt;
+                n /= i;
+            }
+
+            val.push_back({cnt, i});
+        }
 	}
 	if (n > 1) {
 		val.push_back({1, n});
@@ -32,7 +122,7 @@ Can be done in log(n) per query
 
         for(int i=2; i*i<=N; ++i){             
             if(mark[i]){
-                for(int j=i*i; j<=N; j+=i){          
+                for(int j=i; j<=N; j+=i){          
 					//if it is already marked then don't update its spf bcz its spf is already set
 
 					//if it is not marked before

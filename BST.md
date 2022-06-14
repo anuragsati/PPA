@@ -1,3 +1,21 @@
+# swap pair to make sorted
+[https://leetcode.com/problems/recover-binary-search-tree/]
+
+- how to find pair which is wrong in sorted array
+- one way : 
+    find first invalid point from start 
+    find first invalid point from end
+
+- one pass
+    find first invalid point from start a[i] > a[i+1]
+    invalid point a[i+1]
+    f = a[i+1] and we set second as a[i]
+
+    if we find second invalid point then we simpy set second as first is already set
+    if we cant find second point then already second = f+1
+
+
+
 ### Iterative order traversal matching
 [https://practice.geeksforgeeks.org/problems/print-common-nodes-in-bst/1/]
 [https://practice.geeksforgeeks.org/problems/predecessor-and-successor/1/]

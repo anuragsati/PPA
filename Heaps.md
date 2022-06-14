@@ -1,3 +1,18 @@
+### heap idea : 
+- brute force to put all elements in heap then do
+- optimized klogk : put only best contenders in heap to maintain heap size to k (use hashmap to remove duplicate values)
+
+
+
+### at any point we are interested in current max / min
+
+
+### if heap size is increasing everytime look at how it is increasing
+    generally it increases like 1 element -> 2 ele -> 3 .... kelelemtn
+    T.C : log k! = k log k
+
+
+
 ### Merge K sorted arrays (K^2 logk)
 [https://practice.geeksforgeeks.org/problems/merge-k-sorted-arrays/1#]
 

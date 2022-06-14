@@ -1,3 +1,13 @@
+### [VVVIMP] sum of sub min
+[https://leetcode.com/problems/sum-of-subarray-minimums/]
+
+contribution nikaalna hr element ka
+ek element min kbtk hoga : in prev smaller element and next smaller element window mai
+to remove duplicate : maintain striclty less condition on one side
+
+
+
+
 ### 132 pattern
 [https://leetcode.com/problems/132-pattern/]
 

@@ -1,3 +1,70 @@
+### upper and lower bound comparator
+    comp ( ___a, ___b) - don't use & because modification not allowed
+
+    a = values of element that you are searching for
+    b = value of mid when doing binary search
+
+    return true if you want a to be placed before b
+    example you are searching for 3 and mid is 5 so return true bcz 3 is less than 5
+    and you want 3 before 5 in sorted array
+
+    upperbound takes care of equal cases (it automatically return next element even if equal)
+
+```c++
+    // comparator to search using second value (a = value)
+    bool comp(vector<int> a, vector<int> b){
+        if(a[1] == b[1])
+            return a[0] < b[0];
+        return a[1] < b[1];
+    }
+```
+
+
+
+### std::set comparator
+    similar to array comp but we need to use const and struct
+
+```c++
+    struct comp{
+        bool operator() (const pii &a, const pii &b) const{
+            if(a.first == b.first)
+                return a.second < b.second;
+
+            return a.first > b.first;
+        }
+    };
+
+    set<pii, comp>
+```
+
+
+
+
+### Standard problem ... Finding number of smaller elments to right [IMP]
+[https://leetcode.com/problems/count-of-smaller-numbers-after-self/]
+
+[https://cses.fi/problemset/task/2169]
+[imp merge sort application]
+
+- basically in an array [i, i+1, ..... ]
+    we want to find i < j
+    such that a[i] > a[j]
+    which is basically inversion count type problem
+    so we will use merge sort
+
+
+- store original index
+
+
+
+
+
+
+
+
+
+
+
 ==========================================
 # Quick Select [IMP]
 [https://www.youtube.com/watch?v=fnbImb8lo88]
@@ -22,6 +89,23 @@
     N (1/2 + 1/4 + 1/8 ....)
 
     O(N)    [this sum can never reach 1]
+
+- nth_element(a.begin(), a.begin()+k, a.end(), comp);
+    this rearranges array such that k is at its right place
+    k is 0 based index 
+    comp function works same as sorting comp 
+
+example :
+```c++
+    static bool comp(pair<int, int> &a, pair<int, int> &b){
+        if(a.first == b.first)
+            return a.second > b.second;
+        return a.first > b.first;
+    }
+
+    nth_element(a.begin(), a.begin()+k-1, a.end(), comp);
+```
+
 
 
 

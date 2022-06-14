@@ -132,9 +132,9 @@ func(n, sum) ==> total ways to make sum using elements [0....n]
 ```c++
 	int func(int a[], int n, int sum){
 		if(sum == 0)
-			return true;
+			return 1;
 		if(n == 0 && sum != 0)
-			return false;
+			return 0;
 		
 		if(dp[n][sum])
 			return dp[n][sum];
@@ -476,6 +476,14 @@ coices :
 ```
 
 
+### IMP POINTS TO NOTE
+- if you want LDS just reverse input array
+- if you want LNDS just replace by upper bound
+- if you want lds starting with i going till n
+    start from end with -ve elements that will make ans increasing
+
+
+
 ### LIS in O(n Logn)
 
 - Part of "patience sort"
@@ -503,7 +511,7 @@ coices :
         // find a[i] in ans (next greater of a[i]) (if equal just replace)
         int p = lower_bound(all(ans), a[i])-ans.begin();        
 
-		if(p < ans.size()) 		// update then next neighbour bcx it may increase sub. in future
+		if(p < ans.size()) 		// decrease then next neighbour bcx it may increase sub. in future
             ans[p] = a[i];
         else                    // append in ans bcz a[i] is greater than all
             ans.push_back(a[i]);
@@ -533,6 +541,89 @@ coices :
     //lis array contains lis of all indices
 
 ```
+
+### strict LIS starting from i till n
+- we move from back to front
+- we maintain a decreasing array ans (oppsite to what we used to do in lis)
+- if we encounter smallest element we push it in ans
+- else we find first element(leftmost) which is <= x in ans using bsearch
+- we try to make this chain as long as possible
+
+10 7 6 4 3 2 [x=5]
+then we replace 4 with 5
+10 7 6 5 3 2 [x=5]
+
+we cant replace 6 bcz that will reduce optimal ans 
+if we decrease 6 that reduces possiblity of lesser element
+thats why we try to increase next element i.e 4 (which is first element <= x)
+if cant find then return a.size() to indicate we need to push this element
+
+```c++
+    int lbound(vector<int> &a, int x){
+        if(a.size() == 0 || a.back() > x)
+            return a.size();
+
+        int l = 0, r = a.size()-1;
+        int ans = 0;
+        while(l<=r){
+            int mid = l + (r-l) / 2;
+
+            if(a[mid] > x)
+                l = mid + 1;
+            else{
+                ans = mid;
+                r = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+
+    // ..................
+
+    vector<int> suff(n);
+    vector<int> ans;
+    for(int i=n-1; i>=0; --i){
+        int p = lbound(ans, a[i]);
+
+        if(p < ans.size()){
+            suff[i] = p+1;
+            ans[p] = a[i];
+        }
+        else{
+            suff[i] = ans.size()+1;
+            ans.push_back(a[i]);
+        }
+    }
+```
+
+
+- OR you can put elements in -ve sign 
+    that makes array to be increasing
+
+- whenever you want a container that is increasing  to be in decreasing just replace 
+    all elements with -ve sign
+
+
+```c++
+	// suff stores the longest increasing subsequence starting from i going till n
+	vector<int> suff(n);
+	for (int i = n - 1; i >= 0; i--) {
+		auto p = lower_bound(all(ans), -a[i]) - ans.begin();
+
+        if(p < ans.size()){
+            suff[i] = p+1;
+            ans[p] = -a[i];
+        }
+        else{
+            suff[i] = ans.size()+1;
+            ans.push_back(-a[i]);
+        }
+	}
+
+```
+
+
 
 
 ### Longest Non decreasing subsequence
@@ -568,7 +659,7 @@ coices :
 
 ### LCS
 ```c++
-	int LCS(string &a, string &b, int m, int n){
+	int LCS(string &a, string &b int m, int n){
 		if(m==0 || n==0)
 			return dp[m][n] = 0;
 
@@ -861,6 +952,13 @@ idea : same as LCS but we just add a simple condition
 
 # ================================= Diagonal DP =================================
 
+
+### O(N) optimization
+[https://leetcode.com/problems/longest-palindromic-subsequence/]
+![picture 1](../images/0813290fd27bf4314a8a4eeb11c713186133ecbcb6594820304f5711c0d55658.png)  
+
+
+
 ### MCM
 [https://practice.geeksforgeeks.org/problems/matrix-chain-multiplication0303/1#]
 
@@ -1017,18 +1115,40 @@ idea :
 # ================================= Kadane's algo =================================
 ### Kadane's algo [https://www.youtube.com/watch?v=VMtyGnNcdPw]
 
-if we can include this element in curr sum i.e ele + curr sum > 0 then we include it
-else we exclude it and set subarray to 0
+if our current sum is -ve that means we have a negative prefix
+so it makes no sense to include that 
+we always include +ve prefix
+if we have -ve prefix then we start new array from this point
+
+```c++
+    int maxSubArray(const vector<int> &a) {
+        int n = a.size();
+        int prefix=a[0], ans=a[0];
+        for(int i=1; i<n; ++i){
+            if(prefix < 0)  //if prefix is -ve its better to start from this point
+                prefix = a[i];
+            else
+                prefix += a[i];
+            
+            ans = max(ans, prefix);
+        }
+
+        return ans;
+    }
+```
+
 
 l = left bound of max subarray 
 r = right bound
 
+if prefix is -ve then it must have become -ve at i-1 th point
+
 ```c++
-	int csum = 0, osum = 0, l=0;
-	for(int i=0; i<n; ++i){
-		if(csum + a[i] < 0){ //exclude and set subarray to 0 bcx this element is negative(guaranteed)
-			csum = 0;
-			l = i+1;//start subarray from next i+1 index
+	int csum = a[0], osum = a[0], l=0;
+	for(int i=1; i<n; ++i){
+		if(csum < 0){   //start new subarray
+			csum = a[i];
+			l = i;  //start subarray from this index
 		}
 		else{ //include in running sum
 			csum += a[i];
@@ -1039,6 +1159,9 @@ r = right bound
 			ans = {l, i};       //answer of max subarray
 		}
 	}
+
+    if(osum < 0) // if overall sum is -ve then according to quesion you can return 0 or this sum
+        choice;
 ```
 
 

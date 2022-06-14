@@ -1,3 +1,22 @@
+### Greedy denominations for min coin change
+
+greedy works in few cases for others we will have to use dp
+- 1 2 5 10 50 100 (euro coins)
+- 1 k k^2 k^3 .... (powers of k)
+    
+in these type of denominations we can select min coins by picking max first any number of times
+bcz if we dont pick max at current we will not be able to make this change
+
+ex : change = 82
+    coins = 1 9 81 789
+    if we dont pick 81 then we will not be able to make change as 1...9 does not add up to 81
+
+
+
+
+
+
+
 ### [https://leetcode.com/problems/equal-sum-arrays-with-minimum-number-of-operations/]
 
 

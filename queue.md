@@ -1,3 +1,14 @@
+# first non repeating char in a stream
+[https://www.interviewbit.com/problems/first-non-repeating-character-in-a-stream-of-characters/]
+
+imp. we maintain a monotonic queue if freq of q.front() is more than 1 we pop it 
+
+hr baar freq increase kro queue ka first element ans dega
+
+
+
+
+
 ### Gas station problem
 [https://leetcode.com/problems/gas-station/]
 

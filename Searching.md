@@ -1,4 +1,5 @@
 ### Binary search is used in places where we need to find smallest / largest in a range
+    and in places where we need to do something in atmost/atleast k moves
 
 
 
@@ -215,6 +216,8 @@ ans : use binary search on answer
 ### Kth element in 2 sorted arrays ***IMP***
 [https://www.youtube.com/watch?v=nv7F4PiLUzo]
 
+- better way below
+
 	we will apply binary search in first array (smaller one)
 	l = max(0, k-m) either it is 0 or k-m if we have to pick atleast some elements from 1st array
 	r = min(k, n) either pick whole array or k elements
@@ -259,6 +262,49 @@ ans : use binary search on answer
 		return 1;
     }
 ```
+
+### median of 2 sorted array [n/2th element in 2 sorted array] [vvvvvvimp]
+```c++
+    double Solution::findMedianSortedArrays(const vector<int> &a, const vector<int> &b) {
+        if(a.size() > b.size())
+            return findMedianSortedArrays(b, a);
+
+        int n = a.size();
+        int m = b.size();
+        int N = n+m;
+        const int inf = 1e9;
+
+
+        int l=0, r=n;
+        double ans = 0;
+        while(l<=r){
+            int i = l + (r-l)/2;
+            int j = (N+1)/2 - i;
+
+            int aleft = (i-1>=0) ? a[i-1] : -inf;
+            int aright = (i<n) ? a[i] : inf;
+            int bleft = (j-1>=0) ? b[j-1] : -inf;
+            int bright = (j<m) ? b[j] : inf;
+
+            if(aleft <= bright && bleft <= aright){
+                if(N&1)
+                    ans = max(aleft, bleft);
+                else
+                    ans = (max(aleft, bleft) + min(aright, bright)) / 2.0;
+                break;
+            }
+            else if(aleft >= bright)
+                r = i - 1;
+            else
+                l = i + 1;
+        }
+
+        return ans;
+    }
+```
+
+
+
 
 
 
